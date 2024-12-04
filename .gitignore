@@ -1,0 +1,14 @@
+# Common ignore paths, from github.com/github/gitignore
+/_build
+/cover
+/deps
+/doc
+/.fetch
+erl_crash.dump
+*.ez
+*.beam
+/config/*.secret.exs
+.elixir_ls/
+
+# Ignore input files, at request of Advent of Code
+data.txt

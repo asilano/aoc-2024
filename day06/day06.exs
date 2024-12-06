@@ -9,8 +9,9 @@ defmodule Day06 do
     |> trodden_paths()
     |> Enum.map(fn {guard, facing} -> guard end)
     |> Enum.uniq()
-    |> Enum.count(fn possible ->
-      trodden_paths(map, possible) == :loop
+    |> Task.async_stream(fn possible -> trodden_paths(map, possible) end, ordered: false)
+    |> Enum.count(fn {:ok, result} ->
+      result == :loop
     end)
   end
 

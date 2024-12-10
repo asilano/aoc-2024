@@ -158,6 +158,7 @@ defmodule Day09 do
       {file_map, _} = Enum.reduce(gap_map, {undefrag_map, empty_gap_map}, &fill_gap/2)
 
       file_map
+      |> IO.inspect()
       |> Enum.map(fn {file_id, {start, size}} ->
         start..(start + size - 1) |> Enum.map(&(&1 * file_id)) |> Enum.sum()
       end)

@@ -1,12 +1,29 @@
 defmodule Day11 do
-  def part_one(data) do
-    data |> String.split() |> run_steps(25) |> length()
+  use Agent
+
+  def part_both(data, steps) do
+    start_agent()
+    data |> String.split() |> run_steps(steps) |> Enum.sum()
   end
 
-  defp run_steps(stones, 0), do: stones
+  def start_agent(), do: Agent.start_link(fn -> %{} end, name: __MODULE__)
 
-  defp run_steps(stones, steps) do
-    run_steps(Enum.flat_map(stones, &step_stone/1), steps - 1)
+  def run_steps(stones, steps) do
+    Enum.map(stones, &expand_stone_length(&1, steps))
+  end
+
+  defp expand_stone_length(_, 0), do: 1
+
+  defp expand_stone_length(stone, steps) do
+    if cached_len = Agent.get(__MODULE__, &Map.get(&1, {stone, steps})) do
+      cached_len
+    else
+      Enum.map(step_stone(stone), &expand_stone_length(&1, steps - 1))
+      |> Enum.sum()
+      |> tap(fn len ->
+        Agent.update(__MODULE__, &Map.put(&1, {stone, steps}, len))
+      end)
+    end
   end
 
   defp step_stone("0"), do: ["1"]
@@ -26,4 +43,5 @@ end
 
 sample = "125 17"
 data = to_string(File.read!(Path.join(__DIR__, "data.txt")))
-IO.inspect(Day11.part_one(data))
+IO.inspect(Day11.part_both(data, 25))
+IO.inspect(Day11.part_both(data, 75))

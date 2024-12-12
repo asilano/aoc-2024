@@ -9,6 +9,7 @@ erl_crash.dump
 *.beam
 /config/*.secret.exs
 .elixir_ls/
+.formatter.exs
 
 # Ignore input files, at request of Advent of Code
 data.txt

@@ -12,4 +12,4 @@ erl_crash.dump
 .formatter.exs
 
 # Ignore input files, at request of Advent of Code
-data.txt
+data*.txt
